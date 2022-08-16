@@ -10,16 +10,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model DataSetName {
+  id    String    @id @unique
+  date Date[]
+  nameIsId String @unique
+}
+
 model Date {
   id    Int    @id @default(autoincrement())
-  dayfield DayField[]
-  name String
+  dayField DayField[]
+  dataSetName   DataSetName @relation(fields: [dataSetId], references: [id])
+  date String
+  dataSetId String
 }
 
 model DayField {
   id       Int  @id @default(autoincrement())
   date   Date @relation(fields: [dateId], references: [id])
-  dateId Int // relation scalar field  (used in the `@relation` attribute above)
+  dateId Int
   name String
   isSelected Boolean
 }

@@ -5,7 +5,7 @@ import { Button } from "react-bootstrap";
 import { IHourData } from "./Day";
 import axios from "axios";
 
-interface IDaysData {
+export interface IDaysData {
   [key: string]: IHourData;
 }
 

@@ -20,16 +20,3 @@ export default function handler(
   }
 }
 
-async function saveDateData(dateData: any) {
-  const prisma = new PrismaClient();
- await prisma.date.create({
-    data: {
-      posts: {
-        create: [
-          { title: 'Prisma Day 2020' }, // Populates authorId with user's id
-          { title: 'How to write a Prisma schema' }, // Populates authorId with user's id
-        ],
-      },
-    },
-  })
-}

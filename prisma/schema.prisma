@@ -11,23 +11,23 @@ datasource db {
 }
 
 model DataSetName {
-  id    String    @id @unique
-  date Date[]
+  id       String @id @unique
+  date     Date[]
   nameIsId String @unique
 }
 
 model Date {
-  id    Int    @id @default(autoincrement())
-  dayField DayField[]
-  dataSetName   DataSetName @relation(fields: [dataSetId], references: [id])
-  date String
-  dataSetId String
+  id          String      @id @unique
+  dayField    DayField[]
+  dataSetName DataSetName @relation(fields: [dataSetId], references: [id])
+  dateIsId    String
+  dataSetId   String
 }
 
 model DayField {
-  id       Int  @id @default(autoincrement())
-  date   Date @relation(fields: [dateId], references: [id])
-  dateId Int
-  name String
+  id         Int     @id @default(autoincrement())
+  date       Date    @relation(fields: [dateId], references: [id])
+  dateId     String
+  name       String
   isSelected Boolean
 }

@@ -1,12 +1,22 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
-import { PrismaClient } from "@prisma/client";
+import { DayField, PrismaClient } from "@prisma/client";
 import { IDaysData } from "../../components/Calendar";
 
 interface IReceivedData {
   daysData: IDaysData;
   datasetName: string;
 }
+
+type tills =
+  | "till8"
+  | "till10"
+  | "till12"
+  | "till14"
+  | "till16"
+  | "till18"
+  | "till20"
+  | "till22";
 
 export default function handler(
   req: NextApiRequest,
@@ -65,27 +75,39 @@ async function upsertDates(prisma: PrismaClient, receivedData: IReceivedData) {
 
 async function upsertDayFields(prisma: PrismaClient, daysData: IDaysData) {
   for (let date in daysData) {
-    const dayFields = await prisma.dayField.findMany({
-      where: {
-        dateId: {
-          equals: date,
+    const dayFields: void | DayField[] = await prisma.dayField
+      .findMany({
+        where: {
+          dateId: {
+            equals: date,
+          },
         },
-      },
-    }); 
-    if(dayFields) {
-      for (let dayField of dayFields) {
-        await prisma.dayField.update({
-          where: {
-            id: dayField.id,
-          },
-          data: {
-            //@ts-ignore
-            isSelected: daysData[date][dayField.name].isSelected as boolean,
-          },
-        })
-      }
-    } else {
+      })
+      .then(async (dayFields: DayField[]) => {
+        if (dayFields) {
+          for (let dayField of dayFields) {
+            await prisma.dayField.update({
+              where: {
+                id: dayField.id,
+              },
+              data: {
+                isSelected: daysData[date][dayField.name as tills],
+              },
+            });
+          }
+        } else {
+          let x = daysData[date].till12;
 
-    }
+          // for (let dayField of daysData[date])  {
+
+          // }
+          // const user = await prisma.dayField.create({
+          //   data: {
+          //     dateId: date,
+          //     name: dayField,
+          //   },
+          // })
+        }
+      });
   }
 }

@@ -74,6 +74,7 @@ async function upsertDates(prisma: PrismaClient, receivedData: IReceivedData) {
 }
 
 async function upsertDayFields(prisma: PrismaClient, daysData: IDaysData) {
+  //refactor, split in different functions
   for (let date in daysData) {
     const dayFields: void | DayField[] = await prisma.dayField
       .findMany({

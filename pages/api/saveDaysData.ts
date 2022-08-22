@@ -79,7 +79,8 @@ async function upsertDayFields(prisma: PrismaClient, daysData: IDaysData) {
             id: dayField.id,
           },
           data: {
-            //isSelected: daysData.date.dayField.name,
+            //@ts-ignore
+            isSelected: daysData[date][dayField.name].isSelected as boolean,
           },
         })
       }
